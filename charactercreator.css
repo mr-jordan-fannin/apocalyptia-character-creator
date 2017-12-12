@@ -1,0 +1,213 @@
+html {
+   margin:0;
+   padding:0;
+   height:100%;
+}
+canvas {
+    max-width: 1275px;
+    max-height: 1650px;
+}
+body {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-family: Courier, monospace;
+    font-size: 18px;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+table {
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+    border-spacing: 5px;
+    border: 1px solid gray;
+    color: #000000;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+
+
+#s_health_table, #s_weap_table_header, 
+.trait_name, .trait_name_header {
+    background-color: #A9A9A9;}
+#backpack_header, #comrades_header, #game_notes_header, 
+#s_ability_name, #s_ability_notes, #s_ability_xp, 
+#s_ar_header, #s_armor_header, #s_armor_notes_header, 
+#s_armor_sz_header, #s_def_header, #s_def_pain_header, 
+#s_hp_header, #s_location_header, 
+.ability_header, .health_prop_header, .instinct_name, .location_name, 
+.mag_ammo_header, .property_name, .s_weap_header {
+    background-color: #CBCBCB;}
+#s_def_blank {
+    border-bottom-style: hidden;}
+#character_sheet_1, #character_sheet_2, 
+td, th {
+    border-collapse: collapse;}
+#character_sheet_1, #character_sheet_2 {
+    border-color: transparent;}
+td, th {
+    border-spacing: 5px;}
+#character_sheet_1, #character_sheet_2 {
+    border-style: hidden;}
+#s_def_blank {
+    border-top-color: transparent;}
+#s_def_blank {
+    border-top-style: hidden;}
+#character_health, #property_definitions {
+    border: 0 solid transparent;}
+td, th {
+    border: 1px solid gray;}
+#backpack_header, #comrades_header, #game_notes_header, #s_ar_header, #s_armor_header, 
+#s_armor_notes_header, #s_armor_sz_header, #s_def_header, #s_def_pain_header, 
+#s_hp_header, #s_health_table, #s_location_header, #s_weap_table_header,
+#starting_armor, #starting_melee, #starting_ranged, #starting_ammo, #mgl_gear,
+.ability_header, .health_prop_header, .instinct_name, .location_name, 
+.mag_ammo_header, .property_name, .s_weap_header, .trait_name, .trait_name_header,
+input, legend, select {
+    color: #000000;}
+button {
+    color: #FFFFFF;}
+#backpack_table {
+    column-width: auto;}
+#psyche_result, #step1 {
+    display: block;}
+#psyche_dots {
+    display: inline;}
+#step2, #step3, #step4, #step5, #step6, #step7 {
+    display: none;}
+.mag_ammo_header {
+    font-size: 18px;}
+.trait_name, .trait_name_header {
+    font-size: 22px;}
+#crazy, #s_def_pain_header, #sane, 
+.defense_name, .instinct_name, .instinct_score, .s_def {
+    font-style: italic;}
+#ability_description, #ability_max, #ability_name, #ability_xp, 
+#backpack_header, #comrades_header, #crazy, #game_notes_header, 
+#head_location, #psyche_dots, #psyche_result, #s_ability_name, 
+#s_ability_notes, #s_ability_xp, #s_ar_header, #s_armor_header, 
+#s_armor_notes_header, #s_armor_sz_header, #s_def_header, #s_def_pain_header, 
+#s_head_loc, #s_health_table, #s_hp_header, #s_location_header, 
+#s_torso_loc, #sane, #torso_location, 
+.defense_name, .health_prop_header, .instinct_name, .mag_ammo_header, 
+.property_name, .property_name, .remaining, .s_def, 
+.s_weap_header, .skill_name, .trait_name, .trait_name_header, 
+.trait_score, .trait_score_header, 
+h2, h3, legend, th {
+    font-weight: 700;}
+#character_health, #character_sheet_1, #character_sheet_2, #property_definitions {
+    margin-left: auto;}
+#character_health, #character_sheet_1, #character_sheet_2, #property_definitions {
+    margin-right: auto;}
+.center {
+    margin: auto;}
+#character_health, #property_definitions {
+    table-layout: auto;}
+#character_abilities, #character_defenses, #character_description, 
+#character_instincts, #character_properties, #character_skills, 
+#character_traits, #starting_gear {
+    table-layout: fixed;}
+#ammo_caliber, #ammo_quantity, #ammo_size, #ammo_type, 
+#armor_ar, #armor_location, #armor_size, #backpack_header, 
+#character_age, #character_gender, #character_hair, #character_health, 
+#character_skin, #character_weight, #comrades_header, #game_notes_header, 
+#height_feet, #height_inches, #melee_damage, #melee_size, 
+#mgl_quantity, #mgl_size, #property_definitions, #psyche_dots, 
+#psyche_result, #ranged_ammo, #ranged_caliber, #ranged_damage, 
+#ranged_magazine, #ranged_range, #ranged_size, #s_ability_name, 
+#s_ability_notes, #s_ability_xp, #s_ar_header, #s_armor_header, 
+#s_armor_notes_header, #s_armor_sz_header, #s_combat_header, #s_def_header, 
+#s_def_pain_header, #s_head_cur_ar, #s_head_cur_hp, #s_health_table, 
+#s_hp_header, #s_larm_cur_ar, #s_larm_cur_hp, #s_lleg_cur_ar, 
+#s_lleg_cur_hp, #s_location_header, #s_rarm_cur_ar, #s_rarm_cur_hp, 
+#s_rleg_cur_ar, #s_rleg_cur_hp, #s_torso_cur_ar_1, #s_torso_cur_ar_2, 
+#s_torso_cur_hp, #s_weap_caliber, #s_weap_mag, 
+.center, .centered, .defense_name, .gear_button, .hp_prop, .instinct_name, .instinct_score, 
+.location_name, .mag_ammo, .mag_ammo_header, .property_name, .skill_score, .s_weap_header, 
+.s_taken, .trait_name, .trait_name_header, .trait_score, .trait_score_header, 
+button, h3, legend, p, th {
+    text-align: center;}
+#sheet_description {
+    text-align: left;}
+.cd_left, .combat, .skill_name {
+    text-align: right;}
+#character_sheet_1, #character_sheet_2 {
+    vertical-align: middle;}
+#ability_check, #ability_max, #ability_xp, #ammo_quantity_header, 
+#ammo_size_header, #armor_ar_header, #armor_size_header, #melee_damage_header, 
+#melee_size_header, #mgl_quantity_header, #mgl_size_header, #ranged_ammo, 
+#ranged_caliber, #ranged_damage_header, #ranged_range_header, #ranged_size_header, 
+#s_ability_xp, #s_armor_sz_header, #s_weap_atk, #s_weap_caliber, 
+#s_weap_dmg, #s_weap_mag, #s_weap_rng, #s_weap_sz, 
+.trait_score_header {
+    width: 5%;}
+#s_def_blank {
+    width: 6%;}
+#ranged_ammo_header, #s_ar_header, #s_hp_header, #s_weap_ammo {
+    width: 10%;}
+#s_def_pain_score, 
+.mag_ammo {
+    width: 14%;}
+#ammo_caliber_header, #ammo_type_header, #s_location_header {
+    width: 15%;}
+#s_def_pain_header, 
+.mag_ammo_header, .s_def {
+    width: 16%;}
+#mgl_name_header, #s_ability_name, 
+.trait_name_header {
+    width: 20%;}
+#ability_name {
+    width: 21%;}
+#armor_location_header {
+    width: 25%;}
+#armor_name_header, #melee_name_header, #ranged_name_header, 
+#s_armor_header, #s_armor_notes_header, #s_weap_type {
+    width: 30%;}
+#armor_notes_header {
+    width: 35%;}
+#ranged_notes_header, #s_weap_notes {
+    width: 45%;}
+.comrades {
+    width: 50%;}
+#character_description {
+    width: 60%;}
+#ability_description {
+    width: 64%;}
+#mgl_notes_header {
+    width: 70%;}
+#ammo_notes_header, #character_defenses, #character_health, #character_health, 
+#character_properties, #melee_notes_header, #property_definitions, 
+#property_definitions, #psyche_dots, #s_ability_notes {
+    width: 75%;}
+#character_name, #player_name {
+    width: 100%;}
+#character_age, #height_feet, #height_inches, #s_head_cur_ar, 
+#s_head_cur_hp, #s_larm_cur_ar, #s_larm_cur_hp, #s_lleg_cur_ar, 
+#s_lleg_cur_hp, #s_rarm_cur_ar, #s_rarm_cur_hp, #s_rleg_cur_ar, 
+#s_rleg_cur_hp, #s_torso_cur_ar_1, #s_torso_cur_ar_2, #s_torso_cur_hp, 
+.skill_score, .trait_score {
+    width: 50px;}
+#character_age {
+    width: 55px;}
+#character_weight {
+    width: 75px;}
+#character_gender, #character_hair, #character_skin {
+    width: 100px;}
+#character_sheet_1, #character_sheet_2 {
+    width: 800px;}
+#container {
+   min-height:100%;
+   position:relative;
+}
+#body {
+   padding-bottom:20px;
+}
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:20px;
+}

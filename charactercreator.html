@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apocalyptia Character Creator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="charactercreator.js"></script>
+    <script src="jspdf.debug.js"></script>
+    <script src="html2canvas.js"></script>
+    <script src="gear.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="charactercreator.css">
+    <style>
+        #footer {
+            background-color: #000000;
+            color: #FFFFFF;
+            font: 12px Courier, monospace;
+            height: 5%;
+            position: relative;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <header class="navbar-inverse">
+	        <ul class="nav nav-tabs" id="tab_bar">
+	            <li><a id="0" href="http://www.apocalyptiarpg.com">HOME</a></li>
+	            <li class="active"><a id="1" onclick="tabSelect(1)" data-toggle="tab" href="#step1">DESCRIPTION</a></li>
+	            <li><a id="2" onclick="tabSelect(2)" data-toggle="tab" href="#step2">TRAITS</a></li>
+	            <li><a id="3" onclick="tabSelect(3)" data-toggle="tab" href="#step3">SKILLS</a></li>
+	            <li><a id="4" onclick="tabSelect(4)" data-toggle="tab" href="#step4">PROPERTIES</a></li>
+	            <li><a id="5" onclick="tabSelect(5)" data-toggle="tab" href="#step5">ABILITIES</a></li>
+	            <li><a id="6" onclick="tabSelect(6)" data-toggle="tab" href="#step6">GEAR</a></li>
+	            <li><a id="7" onclick="tabSelect(7)" data-toggle="tab" href="#step7">CHARACTER SHEET</a></li>
+	        </ul>
+   		</header>
+        <div id="body">
+            <div class="tab-content">
+                <div id="step1" class="tab-pane">
+                    <br>
+                    <div class="centered">
+
+                    </div>
+                    <h2>STEP 1: CHARACTER DESCRIPTION</h2>
+                    <p>Describe your Character below or <input type="button" id="random_button" value="Randomly Generate" onclick="randomAll()"></p>
+                    <table id="character_description">
+                        <tr>
+                            <td class="cd_left">Player Name:</td>
+                            <td><input id="player_name" onchange="setDescription()"></td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="name_button" value="Character Name:" onclick="randomName()"></td>
+                            <td><input id="character_name" onchange="setDescription()"></td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="faction_button" value="Faction:" onclick="randomFaction()"></td>
+                            <td id="selected_faction">
+                                <select id="factions" onchange="setDescription()">
+                                    <option value="Independent">Independent</option>
+                                    <option value="Amazon">Amazon</option>
+                                    <option value="Aryan">Aryan</option>
+                                    <option value="Bandit">Bandit</option>
+                                    <option value="Barbarian">Barbarian</option>
+                                    <option value="Cannibal">Cannibal</option>
+                                    <option value="Cultist">Cultist</option>
+                                    <option value="Gangsta">Gangsta</option>
+                                    <option value="Guerrilla">Guerrilla</option>
+                                    <option value="Hippy">Hippy</option>
+                                    <option value="Mercenary">Mercenary</option>
+                                    <option value="Militia">Militia</option>
+                                    <option value="Pirate">Pirate</option>
+                                    <option value="Punk">Punk</option>
+                                    <option value="Raider">Raider</option>
+                                    <option value="Trader">Trader</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="age_button" value="Age:" onclick="randomAge()"></td>
+                            <td><input type="number" pattern="[0-9]*" inputmode="numeric" min="8" id="character_age" onchange="ageTraitAdjust()">yrs</td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="gender_button" value="Gender:" onclick="randomGender()"></td>
+                            <td><input id="character_gender" onchange="setDescription()"></td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="height_button" value="Height:" onclick="randomHeight()"></td>
+                            <td><input type="number" pattern="[0-9]*" inputmode="numeric" id="height_feet" min="4" max="6" onchange="setDescription()">ft <input type="number" pattern="[0-9]*" inputmode="numeric" id="height_inches" min="0" max="11" onchange="setDescription()">in</td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="weight_button" value="Weight:" onclick="randomWeight()"></td>
+                            <td><input type="number" pattern="[0-9]*" inputmode="numeric" min="75" max="300" id="character_weight" onchange="setDescription()">lbs</td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="skin_button" value="Skin:" onclick="randomSkin()"></td>
+                            <td><input id="character_skin" onchange="setDescription()"></td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="hair_button" value="Hair:" onclick="randomHair()"></td>
+                            <td><input id="character_hair" onchange="setDescription()"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; font-weight:bold;" colspan=2>Optional</td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left">Experience:</td>
+                            <td>
+                                <input type="number" id="starting_xp" value=0 min=0 style="width: 70px;" onchange="setDescription()"> or
+                                <select id="experience_level" onchange="setExperienceLevel()">
+                                    <option selected value="New">New</option>
+                                    <option value="Capable">Capable</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Seasoned">Seasoned</optioin>
+                                    <option value="Veteran">Veteran</option>
+                                    <option value="Elite">Elite</option>
+                                    <option value="Master">Master</option>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="flaw_button" value="Flaws:" onclick="randomOption('flaw')"></td>
+                            <td id="selected_flaw">
+                                <select id="flaw" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Addiction">Addiction</option>
+                                    <option value="Allergy">Allergy</option>
+                                    <option value="Amnesia">Amnesia</option>
+                                    <option value="Amputee">Amputee</option>
+                                    <option value="Anemia">Anemia</option>
+                                    <option value="Anxiety">Anxiety</option>
+                                    <option value="Asthma">Asthma</option>
+                                    <option value="Bad Back">Bad Back</option>
+                                    <option value="Blind">Blind</option>
+                                    <option value="Cancer">Cancer</option>
+                                    <option value="Coward">Coward</option>
+                                    <option value="Crippled">Crippled</option>
+                                    <option value="Cruel">Cruel</option>
+                                    <option value="Deaf">Deaf</option>
+                                    <option value="Debt">Debt</option>
+                                    <option value="Deformed">Deformed</option>
+                                    <option value="Diabetes">Diabetes</option>
+                                    <option value="Dyslexia">Dyslexia</option>
+                                    <option value="Forgetful">Forgetful</option>
+                                    <option value="Gambler">Gambler</option>
+                                    <option value="Kleptomania">Kleptomania</option>
+                                    <option value="Lazy">Lazy</option>
+                                    <option value="Meek">Meek</option>
+                                    <option value="Mute">Mute</option>
+                                    <option value="Myopia">Myopia</option>
+                                    <option value="Naive">Naive</option>
+                                    <option value="Nightmares">Nightmares</option>
+                                    <option value="Noisy">Noisy</optoin>
+                                    <option value="Obese">Obese</option>
+                                    <option value="Pacifist">Pacifist</option>
+                                    <option value="Paranoia">Paranoia</option>
+                                    <option value="Phobia">Phobia</option>
+                                    <option value="Racist">Racist</option>
+                                    <option value="Sexist">Sexist</option>
+                                    <option value="Speech Impediment">Speech Impediment</option>
+                                    <option value="Superstition">Superstition</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="history_button" value="History:" onclick="randomOption('history')"></td>
+                            <td id="selected_history">
+                                <select id="history" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Assassinated a leader">Assassinated a leader</option>
+                                    <option value="Bounty for your capture">Bounty for your capture</option>
+                                    <option value="Branded for desertion">Branded for desertion</option>
+                                    <option value="Death mark on your head">Death mark on your head</option>
+                                    <option value="Find lost lover">Find lost lover</option>
+                                    <option value="Former Bandit">Former Bandit</option>
+                                    <option value="Former Barbarian">Former Barbarian</option>
+                                    <option value="Former Cannibal">Former Cannibal</option>
+                                    <option value="Former Child Soldier">Former Child Soldier</option>
+                                    <option value="Former Cultist">Former Cultist</option>
+                                    <option value="Former Guerrilla">Former Guerrilla</option>
+                                    <option value="Former Hippie">Former Hippie</option>
+                                    <option value="Former Hooker">Former Hooker</option>
+                                    <option value="Former Junky">Former Junky</option>
+                                    <option value="Former Mercenary">Former Mercenary</option>
+                                    <option value="Former Pirate">Former Pirate</option>
+                                    <option value="Former Preacher">Former Preacher</option>
+                                    <option value="Former Raider">Former Raider</option>
+                                    <option value="Former Slave">Former Slave</option>
+                                    <option value="Former Wrangler">Former Wrangler</option>
+                                    <option value="Framed for murder">Framed for murder</option>
+                                    <option value="Friend was kidnapped">Friend was kidnapped</option>
+                                    <option value="Had a mentor">Had a mentor</option>
+                                    <option value="Hate one Faction">Hate one Faction</option>
+                                    <option value="Killed a lot of people">Killed a lot of people</option>
+                                    <option value="Lost your child">Lost your child</option>
+                                    <option value="Must avenge a murder">Must avenge a murder</option>
+                                    <option value="Mystery to solve">Mystery to solve</option>
+                                    <option value="Newfound religion">Newfound religion</option>
+                                    <option value="Outcast from Settlement">Outcast from Settlement</option>
+                                    <option value="Parent of 2d6yrs old">Parent of <b>2d6</b>yrs old</option>
+                                    <option value="Personal nemesis">Personal nemesis</option>
+                                    <option value="Recovered from Plague">Recovered from Plague</option>
+                                    <option value="Revenge for a betrayal">Revenge for a betrayal</option>
+                                    <option value="Saved by a hero">Saved by a hero</option>
+                                    <option value="Suffered under a tyrant">Suffered under a tyrant</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="profession_button" value="Profession:" onclick="randomOption('profession')"></td>
+                            <td id="selected_profession">
+                                <select id="profession" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Actor">Actor</option>
+                                    <option value="Baseball Player">Baseball Player</option>
+                                    <option value="Basketball Player">Basketball Player</option>
+                                    <option value="Burglar">Burglar</option>
+                                    <option value="Camp Counselor">Camp Counselor</option>
+                                    <option value="Carpenter">Carpenter</option>
+                                    <option value="Chemist">Chemist</option>
+                                    <option value="Convict">Convict</option>
+                                    <option value="Cop">Cop</option>
+                                    <option value="Courier">Courier</option>
+                                    <option value="Dog Trainer">Dog Trainer</option>
+                                    <option value="Educator">Educator</option>
+                                    <option value="Firefighter">Firefighter</option>
+                                    <option value="Football Player">Football Player</option>
+                                    <option value="Gymnast">Gymnast</option>
+                                    <option value="Homeless">Homeless</option>
+                                    <option value="Lawyer">Lawyer</option>
+                                    <option value="Locksmith">Locksmith</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Mechanic">Mechanic</option>
+                                    <option value="Military">Military</option>
+                                    <option value="Musician">Musician</option>
+                                    <option value="Nurse">Nurse</option>
+                                    <option value="Paramedic">Paramedic</option>
+                                    <option value="Park Ranger">Park Ranger</option>
+                                    <option value="Pilot">Pilot</option>
+                                    <option value="Prize Fighter">Prize Fighter</option>
+                                    <option value="Programmer">Programmer</option>
+                                    <option value="Riding Instructor">Riding Instructor</option>
+                                    <option value="Security Guard">Security Guard</option>
+                                    <option value="Surgeon">Surgeon</option>
+                                    <option value="Taxi Driver">Taxi Driver</option>
+                                    <option value="Technician">Technician</option>
+                                    <option value="Trucker">Trucker</option>
+                                    <option value="Yoga Instructor">Yoga Instructor</option>
+                                    <option value="Zoo Keeper">Zoo Keeper</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="relationship_button1" value="Relationship:" onclick="randomOption('rel1')">
+                            <input type="text" id="com1" class="comrades" onchange="setDescription()"></td>
+                            <td id="selected_relationship1">
+                                <select id="rel1" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Biological siblings">Biological siblings</option>
+                                    <option value="Business partners">Business partners</option>
+                                    <option value="Childhood friends">Childhood friends</option>
+                                    <option value="Cousins">Cousins</option>
+                                    <option value="Family friends">Family friends</option>
+                                    <option value="Former Faction members">Former Faction members</option>
+                                    <option value="Had a falling out">Had a falling out</option>
+                                    <option value="Have the same ex">Have the same ex</option>
+                                    <option value="Mentor/apprentice">Mentor/apprentice</option>
+                                    <option value="Once enemies now allies">Once enemies now allies</option>
+                                    <option value="Only remaining survivors">Only remaining survivors</option>
+                                    <option value="Partners in crime">Partners in crime</option>
+                                    <option value="Respectful rivals">Respectful rivals</option>
+                                    <option value="Share a dark secret">Share a dark secret</option>
+                                    <option value="Step siblings">Step siblings</option>
+                                    <option value="They saved your life">They saved your life</option>
+                                    <option value="War buddies">War buddies</option>
+                                    <option value="You saved their life">You saved their life</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="relationship_button2" value="Relationship:" onclick="randomOption('rel2')">
+                            <input type="text" id="com2" class="comrades" onchange="setDescription()"></td>
+                            <td id="selected_relationship2">
+                                <select id="rel2" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Biological siblings">Biological siblings</option>
+                                    <option value="Business partners">Business partners</option>
+                                    <option value="Childhood friends">Childhood friends</option>
+                                    <option value="Cousins">Cousins</option>
+                                    <option value="Family friends">Family friends</option>
+                                    <option value="Former Faction members">Former Faction members</option>
+                                    <option value="Had a falling out">Had a falling out</option>
+                                    <option value="Have the same ex">Have the same ex</option>
+                                    <option value="Mentor/apprentice">Mentor/apprentice</option>
+                                    <option value="Once enemies now allies">Once enemies now allies</option>
+                                    <option value="Only remaining survivors">Only remaining survivors</option>
+                                    <option value="Partners in crime">Partners in crime</option>
+                                    <option value="Respectful rivals">Respectful rivals</option>
+                                    <option value="Share a dark secret">Share a dark secret</option>
+                                    <option value="Step siblings">Step siblings</option>
+                                    <option value="They saved your life">They saved your life</option>
+                                    <option value="War buddies">War buddies</option>
+                                    <option value="You saved their life">You saved their life</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="relationship_button3" value="Relationship:" onclick="randomOption('rel3')">
+                            <input type="text" id="com3" class="comrades" onchange="setDescription()"></td>
+                            <td id="selected_relationship3">
+                                <select id="rel3" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Biological siblings">Biological siblings</option>
+                                    <option value="Business partners">Business partners</option>
+                                    <option value="Childhood friends">Childhood friends</option>
+                                    <option value="Cousins">Cousins</option>
+                                    <option value="Family friends">Family friends</option>
+                                    <option value="Former Faction members">Former Faction members</option>
+                                    <option value="Had a falling out">Had a falling out</option>
+                                    <option value="Have the same ex">Have the same ex</option>
+                                    <option value="Mentor/apprentice">Mentor/apprentice</option>
+                                    <option value="Once enemies now allies">Once enemies now allies</option>
+                                    <option value="Only remaining survivors">Only remaining survivors</option>
+                                    <option value="Partners in crime">Partners in crime</option>
+                                    <option value="Respectful rivals">Respectful rivals</option>
+                                    <option value="Share a dark secret">Share a dark secret</option>
+                                    <option value="Step siblings">Step siblings</option>
+                                    <option value="They saved your life">They saved your life</option>
+                                    <option value="War buddies">War buddies</option>
+                                    <option value="You saved their life">You saved their life</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="relationship_button4" value="Relationship:" onclick="randomOption('rel4')">
+                            <input type="text" id="com4" class="comrades" onchange="setDescription()"></td>
+                            <td id="selected_relationship4">
+                                <select id="rel4" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Biological siblings">Biological siblings</option>
+                                    <option value="Business partners">Business partners</option>
+                                    <option value="Childhood friends">Childhood friends</option>
+                                    <option value="Cousins">Cousins</option>
+                                    <option value="Family friends">Family friends</option>
+                                    <option value="Former Faction members">Former Faction members</option>
+                                    <option value="Had a falling out">Had a falling out</option>
+                                    <option value="Have the same ex">Have the same ex</option>
+                                    <option value="Mentor/apprentice">Mentor/apprentice</option>
+                                    <option value="Once enemies now allies">Once enemies now allies</option>
+                                    <option value="Only remaining survivors">Only remaining survivors</option>
+                                    <option value="Partners in crime">Partners in crime</option>
+                                    <option value="Respectful rivals">Respectful rivals</option>
+                                    <option value="Share a dark secret">Share a dark secret</option>
+                                    <option value="Step siblings">Step siblings</option>
+                                    <option value="They saved your life">They saved your life</option>
+                                    <option value="War buddies">War buddies</option>
+                                    <option value="You saved their life">You saved their life</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="cd_left"><input type="button" id="relationship_button5" value="Relationship:" onclick="randomOption('rel5')">
+                            <input type="text" id="com5" class="comrades" onchange="setDescription()"></td>
+                            <td id="selected_relationship5">
+                                <select id="rel5" onchange="setDescription()">
+                                    <option selected value="None">None</option>
+                                    <option value="Biological siblings">Biological siblings</option>
+                                    <option value="Business partners">Business partners</option>
+                                    <option value="Childhood friends">Childhood friends</option>
+                                    <option value="Cousins">Cousins</option>
+                                    <option value="Family friends">Family friends</option>
+                                    <option value="Former Faction members">Former Faction members</option>
+                                    <option value="Had a falling out">Had a falling out</option>
+                                    <option value="Have the same ex">Have the same ex</option>
+                                    <option value="Mentor/apprentice">Mentor/apprentice</option>
+                                    <option value="Once enemies now allies">Once enemies now allies</option>
+                                    <option value="Only remaining survivors">Only remaining survivors</option>
+                                    <option value="Partners in crime">Partners in crime</option>
+                                    <option value="Respectful rivals">Respectful rivals</option>
+                                    <option value="Share a dark secret">Share a dark secret</option>
+                                    <option value="Step siblings">Step siblings</option>
+                                    <option value="They saved your life">They saved your life</option>
+                                    <option value="War buddies">War buddies</option>
+                                    <option value="You saved their life">You saved their life</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div align=center>
+                        <input type="button" id="random_desc" value="Random Description" onclick="randomDescription()" style="text-align:center">
+                    </div>
+                    <br>
+                    <div align=center>
+                        <a class="btn btn-primary" id="step1btn" onclick="tabSelect(2)" href="#">Next</a>
+                    </div>
+                </div>
+                <div id="step2" class="tab-pane">
+                    <h2>STEP 2: TRAITS AND INSTINCTS</h2>
+                    <p>All <b>Traits</b> start at <b>1</b>. Unless your character is very young or very old, you have a total of <b>12</b> points to divide between your <b>Traits</b> up to a maximum of <b>6</b> points in any given <b>Trait</b>. <b>Instincts</b> are equal to their parent <b>Traits</b>.</p>
+                    <p class="remaining">Remaining Trait Points: <span id="remaining_traits"></span></p>
+                    <legend><strong>Traits</strong></legend>
+                        <table id="character_traits">
+                            <tr>
+                                <td class="trait_name"><u><i>A</i></u>gility: <input type="number" pattern="[0-9]*" inputmode="numeric" id="agility" class="trait_score" min=1 max=6 value=1 oninput="setTraits()"></td>
+                                <td class="trait_name"><u><i>B</i></u>rains: <input type="number" pattern="[0-9]*" inputmode="numeric" id="brains" class="trait_score" min=1 max=6 value=1 oninput="setTraits()"></td>
+                                <td class="trait_name"><u><i>C</i></u>onstitution: <input type="number" pattern="[0-9]*" inputmode="numeric" id="constitution" class="trait_score" min=1 max=6 value=1 oninput="setTraits()"></td>
+                                <td class="trait_name"><u><i>D</i></u>emeanor: <input type="number" pattern="[0-9]*" inputmode="numeric" id="demeanor" class="trait_score" min=1 max=6 value=1 oninput="setTraits()"></td>
+                            </tr>
+                        </table>
+                    <br>
+                    <legend style="text-align:center;"><strong>Instincts</strong></legend>
+                        <table id="character_instincts">
+                            <tr>
+                                <td class="instinct_name">Stealth: <span id="stealth">1</span></td>
+                                <td class="instinct_name">Perception: <span id="perception">1</span></td>
+                                <td class="instinct_name">Athletics: <span id="athletics">1</span></td>
+                                <td class="instinct_name">Socialize: <span id="socialize">1</span></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <br>
+                    <div align=center>
+                        <input type="button" id="random_traits" value="Random Traits" onclick="randomTraits()" style="text-align:center">
+                    </div>
+                    <br>
+                    <div align=center>
+                        <a class="btn btn-primary" id="step2btn" onclick="tabSelect(3)" href="#">Next</a>
+                    </div>
+                </div>
+                <div id="step3" class="tab-pane">
+                    <h2>STEP 3: SKILLS</h2>
+                    <p>You have a number of <b>Skill</b> Points equal to your <b><i><u>B</u></i>rains</b> x6 to distribute between your <b>Skills</b>.</p>
+                    <p><b>Skill</b> ratings are limited by their parent <b>Trait</b> scores.</p>
+                    <p class="remaining">Remaining Skill Points: <span id="remaining_skills"></p>
+                    <legend><strong>Skills</strong></legend>
+                        <table id="character_skills">
+                            <tr>
+                                <td class="trait_name"><b><u><i>A</i></u>gility</b></td>
+                                <td class="trait_score"><span id="skill_agility">1</span></td>
+                                <td class="trait_name"><b><u><i>B</i></u>rains</b></td>
+                                <td class="trait_score"><span id="skill_brains">1</span></td>
+                                <td class="trait_name"><b><u><i>C</i></u>onstitution</b></td>
+                                <td class="trait_score"><span id="skill_constitution">1</span></td>
+                                <td class="trait_name"><b><u><i>D</i></u>emeanor</b></td>
+                                <td class="trait_score"><span id="skill_demeanor">1</span></td>
+                            </tr>
+                            <tr>
+                                <td class="skill_name">Acrobatics:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="acrobatics" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Medicine:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="medicine" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Build:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="build" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Entertain:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="entertain" min=0 max=1 value=0 onchange="setSkills()"></td>
+                            </tr>
+                            <tr>
+                                <td class="skill_name">Larceny:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="larceny" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Science:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="science" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Drive:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="drive" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Leadership:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="leadership" min=0 max=1 value=0 onchange="setSkills()"></td>
+                            </tr>
+                            <tr>
+                                <td class="skill_name">Ranged:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="ranged" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Survival:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="survival" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Melee:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="melee" min=0 max=1 value=0 onchange="setSkills()"></td>
+                                <td class="skill_name">Tame:</td>
+                                <td><input class="skill_score" type="number" pattern="[0-9]*" inputmode="numeric" id="tame" min=0 max=1 value=0 onchange="setSkills()"</td>
+                            </tr>
+                        </table>
+                    <br>
+                    <div align=center>
+                        <input type="button" id="random_skills" value="Random Skills" onclick="randomSkills()" style="text-align:center">
+                    </div>
+                    <br>
+                    <div align=center>
+                        <a class="btn btn-primary" id="step3btn" onclick="tabSelect(4)" href="#">Next</a>
+                    </div>
+                </div>
+                <div id="step4" class="tab-pane">
+                    <h2>STEP 4: PROPERTIES</h2>
+                    <p><b>Properties</b> are values that are automatically calculated based on <b>Traits</b>, <b>Instincts</b>, or <b>Skills</b>.</p>
+                    <br>
+                    <legend>Properties</legend>
+                    <table id="character_properties">
+                        <tr>
+                            <td class="property_name">Speed: <span id="speed"></span> yds</td>
+                            <td class="property_name">XP: <span id="cur_xp"></span>/<span id="max_xp"></span></td>
+                            <td class="property_name">Carry: <span id="cur_carry"></span>/<span id="max_carry"></span></td>
+                            <td class="property_name">Luck: <span id="cur_luck"></span>/<span id="max_luck"></span></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <legend>Defenses</legend>
+                    <table id="character_defenses">
+                        <tr>
+                            <td class="defense_name">Block: <span id="block"></td>
+                            <td class="defense_name">Dodge: <span id="dodge"></td>
+                            <td class="defense_name">Reflex: <span id="reflex"></span></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <legend>Health</legend>
+                    <table id="character_health">
+                        <tr>
+                            <th class="health_prop_header">Location</th>
+                            <th class="health_prop_header">Health</th>
+                        </tr>
+                        <tr>
+                            <td class="location_name" id="head_location">Head</td>
+                            <td class="hp_prop">
+                                <span id="head_max_hp">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="location_name">Left Arm</td>
+                            <td class="hp_prop">
+                                <span id="larm_max_hp">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="location_name">Right Arm</td>
+                            <td class="hp_prop">
+                                <span id="rarm_max_hp">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="location_name" id="torso_location">Torso</td>
+                            <td class="hp_prop">
+                                <span id="torso_max_hp">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="location_name">Left Leg</td>
+                            <td class="hp_prop">
+                                <span id="lleg_max_hp">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="location_name">Right Leg</td>
+                            <td class="hp_prop">
+                                <span id="rleg_max_hp">
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <table id="property_definitions">
+                        <tr>
+                            <td><b>Speed</b> = <b><u><i>A</i></u>gility</b> + <b><u><i>C</i></u>onstitution</b>.</td>
+                            <td><b>Block</b> = <u>Melee</u> Skill.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Experience</b> = <b><u><i>B</i></u>rains</b> x6.</td>
+                            <td><b>Dodge</b> = <u>Acrobatics</u> Skill.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Carry</b> = <b><u><i>C</i></u>onstitution</b> x6.</td>
+                            <td><b>Reflex</b> = <i><u>Perception</u></i> <b>Instinct</b>.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Luck</b> = <b><u><i>D</i></u>emeanor</b>.</td>
+                            <td><b>Torso Health</b> = <b><u><i>C</i></u>onstitution</b> x2.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Psyche</b> = <b><u><i>D</i></u>emeanor</b>.</td>
+                            <td>All other <b>Health</b> = <b><u><i>C</i></u>onstitution</b>.</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <legend>Psyche</legend>
+                    <p><b>Psyche</b> represents your character's current mental stability.</p>
+                    <div id="psyche_result">
+                        Current <b>Psyche:</b> <i>Sane</i> <span id="psyche_dots">&#9675; &#9675; &#9675; &#9675; &#9675; &#9675;</span> <i>Crazy</i>
+                    </div>
+                    <br>
+                    <br>
+                    <div align=center>
+                        <a class="btn btn-primary" id="step4btn" onclick="tabSelect(5)" href="#">Next</a>
+                    </div>
+                </div>
+                <div id="step5" class="tab-pane">
+                    <h2>STEP 5: ABILITIES</h2>
+                    <p>You may spend <b>XP</b> to get <b>Abilities</b>, which offer many different advantages.</p>
+                    <p>You can also save up your <b>XP</b> to get high cost <b>Abilities</b> later.</p>
+                    <p>In <b>Step 6</b>, you will be able to spend <b>XP</b> to get random additional starting <b>Gear</b>.</p>
+                    <p class="remaining">Remaining XP: <span id="remaining_xp"></span></p>
+                    <form name="ability_list" id="character_abilities">
+                        <table id="ability_table">
+                            <tbody>
+                                <tr>
+                                    <th id="ability_check"></th>
+                                    <th id="ability_name">Ability</th>
+                                    <th id="ability_description">Description</th>
+                                    <th id="ability_taken">Taken</th>
+                                    <th id="ability_max">Max</th>
+                                    <th id="ability_xp">XP</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck0" name="Cold Acclimated" type="checkbox"></td>
+                                    <td>Cold Acclimated</td>
+                                    <td id="abdesc0"><b>+1</b>hr <i>Cold-Resistance</i>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken0" name="Cold Acclimated" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck1" name="Designated Marksman" type="checkbox"></td>
+                                    <td>Designated Marksman</td>
+                                    <td id="abdesc1"><b>+1</b> to <i>Called Shot</i> <b>RATKs</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken1" name="Designated Marksman" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck2" name="Engineer" type="checkbox"></td>
+                                    <td>Engineer</td>
+                                    <td id="abdesc2"><b>+1</b> <u>Build</u> for a type of <b>Gear</b>.
+                                        <select id="abEngineer" onchange="setAbility(this)">
+                                            <option selected value="ammunition">Ammunition</option>
+                                            <option value="armor">Armor</option>
+                                            <option value="equipment">Equipment</option>
+                                            <option value="melee">Melee</option>
+                                            <option value="ranged">Ranged</option>
+                                            <option value="vehicles">Vehicles</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken2" name="Engineer" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck3" name="Favorite Weapon" type="checkbox"></td>
+                                    <td>Favorite Weapon</td>
+                                    <td id="abdesc3">Drop (not Break) favorite weapon on <b><i>1</i></b>.
+                                        <select id="abFavoriteWeapon" onchange="setAbility(this)">
+                                            <option selected value="ak_47">AK-47</option>
+                                            <option value="ar_15">AR-15</option>
+                                            <option value="ax">Ax</option>
+                                            <option value="baseball_bat">Baseball Bat</option>
+                                            <option value="benelli_m4">Benelli M4</option>
+                                            <option value="brass_knuckles">Brass Knuckles</option>
+                                            <option value="browning_abolt">Browning A-Bolt</option>
+                                            <option value="cane">Cane</option>
+                                            <option value="cleaver">Cleaver</option>
+                                            <option value="colt_python">Colt Python</option>
+                                            <option value="compound_bow">Compound Bow</option>
+                                            <option value="crossbow">Crossbow</option>
+                                            <option value="crowbar">Crowbar</option>
+                                            <option value="firepoker">Firepoker</option>
+                                            <option value="glock_17">Glock 17</option>
+                                            <option value="hammer">Hammer</option>
+                                            <option value="hatchet">Hatchet</option>
+                                            <option value="henry_golden_boy">Henry Golden Boy</option>
+                                            <option value="h&amp;k_mp5">H&amp;K MP5</option>
+                                            <option value="ice_ax">Ice Ax</option>
+                                            <option value="kimber_1911">Kimber 1911</option>
+                                            <option value="Knife">Knife</option>
+                                            <option value="mac_10">MAC-10</option>
+                                            <option value="machete">Machete</option>
+                                            <option value="marlin_1894c">Marlin 1894C</option>
+                                            <option value="metal_club">Metal Club</option>
+                                            <option value="mossberg_500">Mossberg 500</option>
+                                            <option value="norinco_sks">Norinco SKS</option>
+                                            <option value="pickax">Pickax</option>
+                                            <option value="pitchfork">Pitchfork</option>
+                                            <option value="police_baton">Police Baton</option>
+                                            <option value="remington_700">Remington 700</option>
+                                            <option value="remington_870">Remington 870</option>
+                                            <option value="riot_shield">Riot Shield</option>
+                                            <option value="ruger_10/22">Ruger 10/22</option>
+                                            <option value="ruger_mkiii">Ruger Mk.III</option>
+                                            <option value="savage_mkii">Savage Mk.II</option>
+                                            <option value="Screwdriver">Screwdriver</option>
+                                            <option value="shovel">Shovel</option>
+                                            <option value="sig_saur_p290">SIG Sauer P290</option>
+                                            <option value="sledgehammer">Sledgehammer</option>
+                                            <option value="spear">Spear</option>
+                                            <option value="springfield_m1a">Springfield M1A</option>
+                                            <option value="staff">Staff</option>
+                                            <option value="taurus_94">Taurus 94</option>
+                                            <option value="tire_iron">Tire Iron</option>
+                                            <option value="torch">Torch</option>
+                                            <option value="winchester_sawnoff">Winchester Sawn-off</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken3" name="Favorite Weapon" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck4" name="Forced March" type="checkbox"></td>
+                                    <td>Forced March</td>
+                                    <td id="abdesc4">Team gets <b>+1</b>mph Travel <b>Speed</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken4" name="Forced March" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck5" name="Game Call" type="checkbox"></td>
+                                    <td>Game Call</td>
+                                    <td id="abdesc5">Basic communication with animal sounds.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken5" name="Game Call" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck6" name="Hard Headed" type="checkbox"></td>
+                                    <td>Hard Headed</td>
+                                    <td id="abdesc6">No longer get <i>Stunned</i> by <b>Head DMG</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken6" name="Hard Headed" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck7" name="Lead Foot" type="checkbox"></td>
+                                    <td>Lead Foot</td>
+                                    <td id="abdesc7"><b>+3</b> <u>Drive</u>(Stunt) to Accelerate or Brake.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken7" name="Lead Foot" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck8" name="Marathon Runner" type="checkbox"></td>
+                                    <td>Marathon Runner</td>
+                                    <td id="abdesc8"><b>+1</b> mile of <i>Jogging</i> distance.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken8" name="Marathon Runner" type="number" value="0" min="0" max="12" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">12</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck9" name="Pack Mentality" type="checkbox"></td>
+                                    <td id="abdesc9">Pack Mentality</td>
+                                    <td><b>+1</b> to <b>ATK</b> same target a <b>Comrade ATKs</b></td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken9" name="Pack Mentality" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck10" name="Rage" type="checkbox"></td>
+                                    <td>Rage</td>
+                                    <td id="abdesc10"><b>Fast</b>. <b>+3 MATK DMG</b>. <b>-3 DEF</b>. Lasts 1min.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken10" name="Rage" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck11" name="Sharpshooter" type="checkbox"></td>
+                                    <td>Sharpshooter</td>
+                                    <td id="abdesc11"><i>Aim</i> for an additional rnd for <b>+1 RATK</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken11" name="Sharpshooter" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck12" name="Specialize" type="checkbox"></td>
+                                    <td>Specialize</td>
+                                    <td id="abdesc12"><b>+1</b> to a <b>Skill Specialty</b>.
+                                        <select id="abSpecialize" onchange="setAbility(this)">
+                                            <option selected value="dodge">Acrobatics(Dodge)</option>
+                                            <option value="jump">Acrobatics(Jump)</option>
+                                            <option value="tumble">Acrobatics(Tumble)</option>
+                                            <option value="disable">Larceny(Disable)</option>
+                                            <option value="pick">Larceny(Pick)</option>
+                                            <option value="steal">Larceny(Steal)</option>
+                                            <option value="archery">Ranged(Archery)</option>
+                                            <option value="gun">Ranged(Guns)</option>
+                                            <option value="throw">Ranged(Throw)</option>
+                                            <option value="customize">Build(Customize)</option>
+                                            <option value="repair">Build(Repair)</option>
+                                            <option value="salvage">Build(Salvage)</option>
+                                            <option value="first-aid">Medicine(First-Aid)</option>
+                                            <option value="surgery">Medicine(Surgery)</option>
+                                            <option value="treat">Medicine(Treat)</option>
+                                            <option value="bombs">Science(Bombs)</option>
+                                            <option value="drugs">Science(Drugs)</option>
+                                            <option value="tech">Science(Tech)</option>
+                                            <option value="fly">Drive(Fly)</option>
+                                            <option value="ram">Drive(Ram)</option>
+                                            <option value="stunt">Drive(Stunt)</option>
+                                            <option value="block">Melee(Block)</option>
+                                            <option value="unarmed">Melee(Unarmed)</option>
+                                            <option value="weaponry">Melee(Weaponry)</option>
+                                            <option value="camp">Survival(Camp)</option>
+                                            <option value="forage">Survival(Forage)</option>
+                                            <option value="navigate">Survival(Navigate)</option>
+                                            <option value="distract">Entertain(Distract)</option>
+                                            <option value="inspire">Entertain(Inspire)</option>
+                                            <option value="lie">Entertain(Lie)</option>
+                                            <option value="coordinate">Leadership(Coordinate)</option>
+                                            <option value="encourage">Leadership(Encourage)</option>
+                                            <option value="intimidate">Leadership(Intimidate)</option>
+                                            <option value="calm">Tame(Calm)</option>
+                                            <option value="ride">Tame(Ride)</option>
+                                            <option value="train">Tame(Train)</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken12" name="Specialize" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck13" name="Strong Back" type="checkbox"></td>
+                                    <td>Strong Back</td>
+                                    <td id="abdesc13"><b>+1 Carry</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken13" name="Strong Back" type="number" value="0" min="0" max="6" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">6</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck14" name="Weapon Training" type="checkbox"></td>
+                                    <td>Weapon Training</td>
+                                    <td id="abdesc14"><b>+1 ATK</b> for a weapon type.
+                                        <select id="abWeaponTraining" onchange="setAbility(this)">
+                                            <option selected value="AK-47">AK-47</option>
+                                            <option value="AR-15">AR-15</option>
+                                            <option value="Ax">Ax</option>
+                                            <option value="Baseball Bat">Baseball Bat</option>
+                                            <option value="Benelli M4">Benelli M4</option>
+                                            <option value="Brass Knuckles">Brass Knuckles</option>
+                                            <option value="Browning A-Bolt">Browning A-Bolt</option>
+                                            <option value="Cane">Cane</option>
+                                            <option value="Cleaver">Cleaver</option>
+                                            <option value="Colt Python">Colt Python</option>
+                                            <option value="Compound Bow">Compound Bow</option>
+                                            <option value="Crossbow">Crossbow</option>
+                                            <option value="Crowbar">Crowbar</option>
+                                            <option value="Firepoker">Firepoker</option>
+                                            <option value="Glock 17">Glock 17</option>
+                                            <option value="Hammer">Hammer</option>
+                                            <option value="Hatchet">Hatchet</option>
+                                            <option value="Henry Golden Boy">Henry Golden Boy</option>
+                                            <option value="H&K MP5">H&amp;K MP5</option>
+                                            <option value="Ice Ax">Ice Ax</option>
+                                            <option value="Kimber 1911">Kimber 1911</option>
+                                            <option value="Knife">Knife</option>
+                                            <option value="MAC-10">MAC-10</option>
+                                            <option value="Machete">Machete</option>
+                                            <option value="Marlin 1894C">Marlin 1894C</option>
+                                            <option value="Metal Club">Metal Club</option>
+                                            <option value="Mossberg 500">Mossberg 500</option>
+                                            <option value="Norinco SKS">Norinco SKS</option>
+                                            <option value="Pickax">Pickax</option>
+                                            <option value="Pitchfork">Pitchfork</option>
+                                            <option value="Police Baton">Police Baton</option>
+                                            <option value="Remington 700">Remington 700</option>
+                                            <option value="Remington 870">Remington 870</option>
+                                            <option value="Riot Shield">Riot Shield</option>
+                                            <option value="Ruger 10/22">Ruger 10/22</option>
+                                            <option value="Ruger Mk.III">Ruger Mk.III</option>
+                                            <option value="Savage Mk.II">Savage Mk.II</option>
+                                            <option value="Screwdriver">Screwdriver</option>
+                                            <option value="Shovel">Shovel</option>
+                                            <option value="SIG Sauer P290">SIG Sauer P290</option>
+                                            <option value="Sledgehammer">Sledgehammer</option>
+                                            <option value="Spear">Spear</option>
+                                            <option value="Springfield M1A">Springfield M1A</option>
+                                            <option value="Staff">Staff</option>
+                                            <option value="Taurus 94">Taurus 94</option>
+                                            <option value="Tire Iron">Tire Iron</option>
+                                            <option value="Torch">Torch</option>
+                                            <option value="Winchester Sawn-off">Winchester Sawn-off</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken14" name="Weapon Training" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">3</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck15" name="Aikido" type="checkbox"></td>
+                                    <td>Aikido</td>
+                                    <td id="abdesc15">Ignore second <i>Dodge</i> penalty.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken15" name="Aikido" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck16" name="Allegiance" type="checkbox"></td>
+                                    <td>Allegiance</td>
+                                    <td id="abdesc16">Take a Faction as a <b>Comrade</b>. Refundable.
+                                        <select id="abAllegiance" onchange="setAbility(this)">
+                                            <option value="Independent">Independent</option>
+                                            <option value="Amazon">Amazon</option>
+                                            <option value="Aryan">Aryan</option>
+                                            <option value="Bandit">Bandit</option>
+                                            <option value="Barbarian">Barbarian</option>
+                                            <option value="Cannibal">Cannibal</option>
+                                            <option value="Cultist">Cultist</option>
+                                            <option value="Gangsta">Gangsta</option>
+                                            <option value="Guerrilla">Guerrilla</option>
+                                            <option value="Hippy">Hippy</option>
+                                            <option value="Mercenary">Mercenary</option>
+                                            <option value="Militia">Militia</option>
+                                            <option value="Pirate">Pirate</option>
+                                            <option value="Punk">Punk</option>
+                                            <option value="Raider">Raider</option>
+                                            <option value="Trader">Trader</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken16" name="Allegiance" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck17" name="Bodyguard" type="checkbox"></td>
+                                    <td>Bodyguard</td>
+                                    <td id="abdesc17"><b>+3 DEF</b> when using <i>Protect</i>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken17" name="Bodyguard" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck18" name="Bump Fire" type="checkbox"></td>
+                                    <td>Bump Fire</td>
+                                    <td id="abdesc18"><i>Rapid 2h</i> Guns get the <i>Auto</i> <b>Attribute</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken18" name="Bump Fire" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck19" name="Charismatic" type="checkbox"></td>
+                                    <td>Charismatic</td>
+                                    <td id="abdesc19"><b>+3</b> <i><u>Socialize</u></i> for First Impressions.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken19" name="Charismatic" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck20" name="Controlled Drift" type="checkbox"></td>
+                                    <td>Controlled Drift</td>
+                                    <td id="abdesc20"><b>+3</b> <u>Drive</u>(Stunt) to Turn.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken20" name="Controlled Drift" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck21" name="Danger Sense" type="checkbox"></td>
+                                    <td>Danger Sense</td>
+                                    <td id="abdesc21"><b>+1</b> <i>Reflex</i>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken21" name="Danger Sense" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck22" name="Morse Code" type="checkbox"></td>
+                                    <td>Morse Code</td>
+                                    <td id="abdesc22">Complex communication with dots/dashes.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken22" name="Morse Code" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck23" name="Off-Roader" type="checkbox"></td>
+                                    <td>Off-Roader</td>
+                                    <td id="abdesc23">Ignore <b>Terrain</b> penalty in <b><i>LAND VEHICLES</i></b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken23" name="Off-Roader" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck24" name="Parry" type="checkbox"></td>
+                                    <td>Parry</td>
+                                    <td id="abdesc24">Ignore second <i>Block</i> penalty.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken24" name="Parry" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck25" name="Perseverance" type="checkbox"></td>
+                                    <td>Perseverance</td>
+                                    <td id="abdesc25">Reduce a <b>Situation</b> penalty by <b>-1#</b>.
+                                        <select id="abPerseverence" onchange="setAbility(this)">
+                                            <option selected value="fatigue">Fatigue</option>
+                                            <option value="pain">Pain</option>
+                                            <option value="prone">Prone</option>
+                                            <option value="terrain">Terrain</option>
+                                            <option value="unstable">Unstable</option>
+                                            <option value="visibility">Visibility</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken25" name="Perseverance" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck26" name="Sign Language" type="checkbox"></td>
+                                    <td>Sign Language</td>
+                                    <td id="abdesc26">Basic communication with hand signals.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken26" name="Sign Language" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">6</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck27" name="Efficient Work" type="checkbox"></td>
+                                    <td>Efficient Work</td>
+                                    <td id="abdesc27">Time is halved for a <b>Skill</b> (min 1rnd).
+                                        <select id="abSpecialize">
+                                            <option selected="" value="acrobatics">Acrobatics</option>
+                                            <option value="larceny">Larceny</option>
+                                            <option value="ranged">Ranged</option>
+                                            <option value="build">Build</option>
+                                            <option value="medicine">Medicine</option>
+                                            <option value="science">Science</option>
+                                            <option value="drive">Drive</option>
+                                            <option value="melee">Melee</option>
+                                            <option value="survival">Survival</option>
+                                            <option value="entertain">Entertain</option>
+                                            <option value="leadership">Leadership</option>
+                                            <option value="tame">Tame</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken27" name="Efficient Work" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck28" name="Fast Draw" type="checkbox"></td>
+                                    <td>Fast Draw</td>
+                                    <td id="abdesc28">Draw <b>Size</b> 1 weapons <b>Fast</b> 1/rnd.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken28" name="Fast Draw" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck29" name="Fleet Footed" type="checkbox"></td>
+                                    <td>Fleet Footed</td>
+                                    <td id="abdesc29"><b>+1 Speed</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken29" name="Fleet Footed" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck30" name="Fortunate" type="checkbox"></td>
+                                    <td>Fortunate</td>
+                                    <td id="abdesc30"><b>+1 Luck</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken30" name="Fortunate" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck31" name="Hone Instinct" type="checkbox"></td>
+                                    <td>Hone Instinct</td>
+                                    <td id="abdesc31"><b>+1</b> to an <b>Instinct</b>.
+                                        <select id="abHoneInstinct" onchange="setAbility(this)">
+                                            <option selected="" value="athletics"><i><u>Athletics</u></i></option>
+                                            <option value="perception"><i><u>Perception</u></i></option>
+                                            <option value="socialize"><i><u>Socialize</u></i></option>
+                                            <option value="stealth"><i><u>Stealth</u></i></option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken31" name="Hone Instinct" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck32" name="Recoil Compensation" type="checkbox"></td>
+                                    <td>Recoil Compensation</td>
+                                    <td id="abdesc32">Ignore <i>Rapid</i> <b>RATK</b> penalties.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken32" name="Recoil Compensation" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck33" name="Tactical Reload" type="checkbox"></td>
+                                    <td>Tactical Reload</td>
+                                    <td id="abdesc33"><b>Fast</b> <i>Reload</i> 1/rnd. Keep normal <b>DEF</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken33" name="Tactical Reload" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck34" name="Unorthodox Methods" type="checkbox"></td>
+                                    <td>Unorthodox Methods</td>
+                                    <td id="abdesc34">Select a new parent <b>Trait</b> for a <b>Skill</b>.
+                                        <select id="abUnorthodoxMethodsSkill" onchange="setAbility(this)">
+                                            <option selected="" value="acrobatics">Acrobatics</option>
+                                            <option value="larceny">Larceny</option>
+                                            <option value="ranged">Ranged</option>
+                                            <option value="build">Build</option>
+                                            <option value="medicine">Medicine</option>
+                                            <option value="science">Science</option>
+                                            <option value="drive">Drive</option>
+                                            <option value="melee">Melee</option>
+                                            <option value="survival">Survival</option>
+                                            <option value="entertain">Entertain</option>
+                                            <option value="leadership">Leadership</option>
+                                            <option value="tame">Tame</option></select>
+                                        <select id="abUnorthodoxMethodsTrait" onchange="setAbility(this)">
+                                            <option selected="" value="agility">Agility</option>
+                                            <option value="brains">Brains</option>
+                                            <option value="constitution">Constitution</option>
+                                            <option value="demeanor">Demeanor</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken34" name="Unorthodox Methods" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck35" name="Vendetta" type="checkbox"></td>
+                                    <td>Vendetta</td>
+                                    <td id="abdesc35"><b>+3 ATK</b> vs known members of one Faction. <input style="width:250px" type="text"></td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken35" name="Vendetta" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">9</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck36" name="Boxing" type="checkbox"></td>
+                                    <td>Boxing</td>
+                                    <td id="abdesc36"><i>Unarmed</i> <b>MATKs</b> get the <i>Slam</i> <b>Attribute</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken36" name="Boxing" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck37" name="Improvise Mixture" type="checkbox"></td>
+                                    <td>Improvise Mixture</td>
+                                    <td id="abdesc37"><u>Science</u> uses 1 less Chemical (min 1).</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken37" name="Improvise Mixture" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck38" name="Innovative Design" type="checkbox"></td>
+                                    <td>Innovative Design</td>
+                                    <td id="abdesc38">1 more Customization per item.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken38" name="Innovative Design" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck39" name="Jujitsu" type="checkbox"></td>
+                                    <td>Jujitsu</td>
+                                    <td id="abdesc39"><i>Grab(Lock)</i> optionally does <b>+1 BDMG</b>/rnd.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken39" name="Jujitsu" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck40" name="Jury-Rig" type="checkbox"></td>
+                                    <td>Jury-Rig</td>
+                                    <td id="abdesc40"><u>Build</u> uses 1 less Part (min 1).</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken40" name="Jury-Rig" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck41" name="Karate" type="checkbox"></td>
+                                    <td>Karate</td>
+                                    <td id="abdesc41"><i>Unarmed</i> <b>MATKs</b> get the <i>Chop</i> <b>Attribute</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken41" name="Karate" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck42" name="Lip Reader" type="checkbox"></td>
+                                    <td>Lip Reader</td>
+                                    <td id="abdesc42"><i><u>Perception</u></i>(See) <b>9#</b> to read lips.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken42" name="Lip Reader" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck43" name="Road Warrior" type="checkbox"></td>
+                                    <td>Road Warrior</td>
+                                    <td id="abdesc43"><b>+6 DMG</b> to Ram <b>ATKs</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken43" name="Road Warrior" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck44" name="Sexy" type="checkbox"></td>
+                                    <td>Sexy</td>
+                                    <td id="abdesc44"><b>+3</b> <i><u>Socialize</u></i> with some <b>Extras</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken44" name="Sexy" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">12</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck45" name="Assassin" type="checkbox"></td>
+                                    <td>Assassin</td>
+                                    <td id="abdesc45"><b>+1 DMG</b> per round spent <i>Aiming</i>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken45" name="Assassin" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">15</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck46" name="Hyper-Immunity" type="checkbox"></td>
+                                    <td>Hyper-Immunity</td>
+                                    <td id="abdesc46"><b>+3 <i><u>C</b></u></i> to resist diseases.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken46" name="Hyper-Immunity" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">15</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck47" name="Kick-Boxing" type="checkbox"></td>
+                                    <td>Kick-Boxing</td>
+                                    <td id="abdesc47"><i>Unarmed</i> <b>MATKs</b> get the <i>Rapid</i> <b>Attribute</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken47" name="Kick-Boxing" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">15</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck48" name="Multilingual" type="checkbox"></td>
+                                    <td>Multilingual</td>
+                                    <td id="abdesc48">Learn to speak/read a foreign language. <input onchange="setAbility(this)" style="width:250px" type="text"></td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken48" name="Multilingual" type="number" value="0" min="0" max="9" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">9</td>
+                                    <td style="text-align: center;">15</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck49" name="Powerful Strike" type="checkbox"></td>
+                                    <td>Powerful Strike</td>
+                                    <td id="abdesc49"><b>+1 DMG</b> for a <b><i>MELEE</i></b> weapon type.
+                                        <select id="abPowerfulStrike" onchange="setAbility(this)">
+                                            <option value="ax">Ax</option>
+                                            <option value="baseball_bat">Baseball Bat</option>
+                                            <option value="brass_knuckles">Brass Knuckles</option>
+                                            <option value="cane">Cane</option>
+                                            <option value="cleaver">Cleaver</option>
+                                            <option value="crowbar">Crowbar</option>
+                                            <option value="firepoker">Firepoker</option>
+                                            <option value="hammer">Hammer</option>
+                                            <option value="hatchet">Hatchet</option>
+                                            <option value="ice_ax">Ice Ax</option>
+                                            <option value="Knife">Knife</option>
+                                            <option value="machete">Machete</option>
+                                            <option value="metal_club">Metal Club</option>
+                                            <option value="pickax">Pickax</option>
+                                            <option value="pitchfork">Pitchfork</option>
+                                            <option value="police_baton">Police Baton</option>
+                                            <option value="riot_shield">Riot Shield</option>
+                                            <option value="Screwdriver">Screwdriver</option>
+                                            <option value="shovel">Shovel</option>
+                                            <option value="sledgehammer">Sledgehammer</option>
+                                            <option value="spear">Spear</option>
+                                            <option value="staff">Staff</option>
+                                            <option value="tire_iron">Tire Iron</option>
+                                            <option value="torch">Torch</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken49" name="Powerful Strike" type="number" value="0" min="0" max="3" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">3</td>
+                                    <td style="text-align: center;">15</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck50" name="Treasure Hunter" type="checkbox"></td>
+                                    <td>Treasure Hunter</td>
+                                    <td id="abdesc50">Re-roll any <b>MGL</b> roll 1/day. Keep best.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken50" name="Treasure Hunter" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">15</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck51" name="Ambidextrous" type="checkbox"></td>
+                                    <td>Ambidextrous</td>
+                                    <td id="abdesc51">Ignore <i>Dual-Wield</i> penalty on 1h weapons.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken51" name="Ambidextrous" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">18</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck52" name="Flurry Attack" type="checkbox"></td>
+                                    <td>Flurry Attack</td>
+                                    <td id="abdesc52"><i>Rapid</i> <b>Attribute</b> for a <b><i>MELEE</i></b> weapon type.
+                                        <select id="abFlurryAttack" onchange="setAbility()">
+                                            <option selected="" value="ax">Ax</option>
+                                            <option value="baseball_bat">Baseball Bat</option>
+                                            <option value="brass_knuckles">Brass Knuckles</option>
+                                            <option value="cane">Cane</option>
+                                            <option value="cleaver">Cleaver</option>
+                                            <option value="crowbar">Crowbar</option>
+                                            <option value="firepoker">Firepoker</option>
+                                            <option value="hammer">Hammer</option>
+                                            <option value="hatchet">Hatchet</option>
+                                            <option value="ice_ax">Ice Ax</option>
+                                            <option value="machete">Machete</option>
+                                            <option value="metal_club">Metal Club</option>
+                                            <option value="pickax">Pickax</option>
+                                            <option value="pitchfork">Pitchfork</option>
+                                            <option value="riot_shield">Riot Shield</option>
+                                            <option value="shovel">Shovel</option>
+                                            <option value="sledgehammer">Sledgehammer</option>
+                                            <option value="spear">Spear</option>
+                                            <option value="staff">Staff</option>
+                                            <option value="tire_iron">Tire Iron</option>
+                                            <option value="torch">Torch</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken52" name="Flurry Attack" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">18</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck53" name="Parkour" type="checkbox"></td>
+                                    <td>Parkour</td>
+                                    <td id="abdesc53">Climb at [<b>Speed</b> x2]. Takes whole turn.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken53" name="Parkour" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">18</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck54" name="Pilot License" type="checkbox"></td>
+                                    <td>Pilot License</td>
+                                    <td id="abdesc54">Use <u>Drive</u> to operate aircraft.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken54" name="Pilot License" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">18</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck55" name="Regeneration" type="checkbox"></td>
+                                    <td>Regeneration</td>
+                                    <td id="abdesc55"><b>+1 HP Recovery</b> per night of rest.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken55" name="Regeneration" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">18</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck56" name="Rugged" type="checkbox"></td>
+                                    <td>Rugged</td>
+                                    <td id="abdesc56"><b>+1 Head</b>, <b>Arms</b>, and <b>Legs HP</b>, <b>+2 Torso HP</b>.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken56" name="Rugged" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">18</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck57" name="Radical Reinvention" type="checkbox"></td>
+                                    <td>Radical Reinvention</td>
+                                    <td id="abdesc57">Reassign up to 4 <b>Traits</b>, <b>+1</b> or <b>-1</b> each. Points Remaining:
+                                        <input id="rr_points" style="width:50px" type="text">
+                                        <br>
+                                        <b><i><u>A</u></i>gility</b><input min="1" max="6" id="abRadicalReinventionAgility" style="width:35px" onchange="setAbility(this)" type="number">
+                                        <b><i><u>B</u></i>rains</b><input min="1" max="6" id="abRadicalReinventionBrains" style="width:35px" onchange="setAbility(this)" type="number">
+                                        <b><i><u>C</u></i>onstitution</b><input min="1" max="6" id="abRadicalReinventionConstitution" style="width:35px" onchange="setAbility(this)" type="number">
+                                        <b><i><u>D</u></i>emeanor</b><input min="1" max="6" id="abRadicalReinventionDemeanor" style="width:35px" onchange="setAbility(this)" type="number"></td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken57" name="Radical Reinvention" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">24</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck58" name="Second Chance" type="checkbox"></td>
+                                    <td>Second Chance</td>
+                                    <td id="abdesc58">Spend this <b>Ability</b> to avoid Death once.</td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken58" name="Second Chance" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">24</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><input onchange="setAbility(this)" id="abcheck59" name="Self Improvement" type="checkbox"></td>
+                                    <td>Self Improvement</td>
+                                    <td id="abdesc59"><b>+1</b> to a <b>Trait</b> (max 6).
+                                        <select onchange="setAbility(this)" id="abSelfImprovement">
+                                            <option selected value="agility"><u><i><b>A</i></u>gility</b></option>
+                                            <option value="brains"><u><i><b>B</i></u>rains</b></option>
+                                            <option value="constitution"><u><i><b>C</i></u>onstitution</b></option>
+                                            <option value="demeanor"><u><i><b>D</i></u>emeanor</b></option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;"><input style="width: 50px;" id="abtaken59" name="Self Improvement" type="number" value="0" min="0" max="1" onchange="setAbility(this)"></td>
+                                    <td style="text-align: center;">1</td>
+                                    <td style="text-align: center;">24</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <br>
+                    <div align=center>
+                        <a class="btn btn-primary" id="step5btn" onclick="tabSelect(6)" href="#">Next</a>
+                    </div>
+                </div>
+                <div id="step6" class="tab-pane">
+                    <h2>STEP 6: GEAR</h2>
+                    <p>Roll once for each type of <b>Gear</b>.</p>
+                    <table id="starting_gear">
+                        <tr>
+                            <td>
+                                <br>
+                                <legend>Armor</legend>
+                                <output id="armor_result">
+                                    <table id="starting_armor">
+                                        <tr>
+                                            <th id="armor_name_header">Armor</th>
+                                            <th id="armor_ar_header">AR</th>
+                                            <th id="armor_size_header">Sz</th>
+                                            <th id="armor_location_header">Location</th>
+                                            <th id="armor_notes_header">Notes</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="armor_name">&nbsp;</td>
+                                            <td id="armor_ar">&nbsp;</td>
+                                            <td id="armor_size">&nbsp;</td>
+                                            <td id="armor_location">&nbsp;</td>
+                                            <td id="armor_notes">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </output>
+                                <br>
+                                <div id="get_armor" class="gear_button">
+                                    <input id="armor_button" type="button" value="Roll Armor" onclick="getArmor()">
+                                    <span id="equip_armor_checkbox" style="float:right;"></span>
+                                </div>
+                                <br>
+                            </td>
+                            <td>
+                                <br>
+                                <legend>Melee Weapon</legend>
+                                <output id="melee_result">
+                                    <table id="starting_melee">
+                                        <tr>
+                                            <th id="melee_name_header">Melee Weapon</th>
+                                            <th id="melee_damage_header">DMG</th>
+                                            <th id="melee_size_header">Sz</th>
+                                            <th id="melee_notes_header">Notes</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="melee_name">&nbsp;</td>
+                                            <td id="melee_damage">&nbsp;</td>
+                                            <td id="melee_size">&nbsp;</td>
+                                            <td id="melee_notes">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </output>
+                                <br>
+                                <div id="get_melee" class="gear_button">
+                                    <input id="melee_button" type="button" value="Roll Melee Weapon" onclick="getMelee()">
+                                    <span id="equip_melee_checkbox" style="float:right;"></span>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                                <legend>Ranged Weapon</legend>
+                                <output id="ranged_result">
+                                    <table id="starting_ranged">
+                                        <tr>
+                                            <th id="ranged_name_header">Ranged Weapon</th>
+                                            <th id="ranged_damage_header">DMG</th>
+                                            <th id="ranged_range_header">RNG</th>
+                                            <th id="ranged_size_header">Sz</th>
+                                            <th id="ranged_ammo_header" colspan=2>Ammo</th>
+                                            <th id="ranged_notes_header">Notes</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="ranged_name">&nbsp;</td>
+                                            <td id="ranged_damage">&nbsp;</td>
+                                            <td id="ranged_range">&nbsp;</td>
+                                            <td id="ranged_size">&nbsp;</td>
+                                            <td id="ranged_caliber">&nbsp;</td>
+                                            <td id="ranged_magazine">&nbsp;</td>
+                                            <td id="ranged_notes">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </output>
+                                <br>
+                                <div id="get_ranged" class="gear_button">
+                                    <input id="ranged_button" type="button" value="Roll Ranged Weapon" onclick="getRanged()">
+                                    <span id="equip_ranged_checkbox" style="float:right;"></span>
+                                </div>
+                                <br>
+                            </td>
+                            <td>
+                                <br>
+                                <legend>Ammunition</legend>
+                                <output id="ammo_result">
+                                    <table id="starting_ammo">
+                                        <tr>
+                                            <th id="ammo_caliber_header">Caliber</th>
+                                            <th id="ammo_type_header">Type</th>
+                                            <th id="ammo_notes_header">Notes</th>
+                                            <th id="ammo_size_header">Sz</th>
+                                            <th id="ammo_quantity_header">Qty</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="ammo_caliber">&nbsp;</td>
+                                            <td id="ammo_type">&nbsp;</td>
+                                            <td id="ammo_notes">&nbsp;</td>
+                                            <td id="ammo_size">&nbsp;</td>
+                                            <td id="ammo_quantity">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </output>
+                                <br>
+                                <div id="get_ammo" class="gear_button">
+                                    <input id="ammo_button" type="button" value="Roll Ammunition" onclick="getAmmo()">
+                                    <span id="equip_ammo_checkbox" style="float:right;"></span>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <br>
+                                <legend><b>Random Gear</b></legend>
+                                <p>Roll once for your starting <b>Random Gear</b> package. You get <b>1</b> item per <b>Luck</b> point.</p>
+                                <p>You may spend <b>XP</b> for additional <b>Random Gear</b> rolls.</p>
+                                <p class="remaining">Remaining XP: <span id="gear_xp"></span></p>
+                                <output id="mgl_result">
+                                    <table id="mgl_gear">
+                                        <tr>
+                                            <th id="mgl_name_header">Gear</th>
+                                            <th id="mgl_notes_header">Notes</th>
+                                            <th id="mgl_size_header">Size</th>
+                                            <th id="mgl_quantity_header">Qty</th>
+                                            <th id="mgl_equip_header">Equip</th>
+                                        </tr>
+                                        <tr>
+                                            <td id="mgl_name">&nbsp;</td>
+                                            <td id="mgl_notes">&nbsp;</td>
+                                            <td id="mgl_size">&nbsp;</td>
+                                            <td id="mgl_quantity">&nbsp;</td>
+                                            <td id="mgl_gear">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                </output>
+                                <div id="get_mgl" class="gear_button">
+                                    <input id="mgl_button" type="button" value="Roll Starting Gear" onclick="getGear()">
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div align=center>
+                        <b>Total Carry:</b> <span id="total_carry"></span>/<span id="gear_max_carry"></span>
+                    </div>
+                    <div align=center>
+                        <span id="carry_warning"></span>
+                    </div>
+                    <br>
+                    <div align=center>
+                        <a class="btn btn-primary" id="step6btn" onclick="tabSelect(7)" href="#">Next</a>
+                    </div>
+                </div>
+                <div id="step7" class="tab-pane">
+                    <div id="character_sheet_1">
+                        <br>
+                        <br>
+                        <table id="sheet_description" style="font-size: 16px;">
+                            <tr>
+                                <td colspan="3">Character Name: <span id="s_character_name"></span></td>
+                                <td colspan="3">Player Name: <span id="s_player_name"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Height: <span id="s_character_height"></span></td>
+                                <td>Weight: <span id="s_character_weight"></span></td>
+                                <td>Skin: <span id="s_character_skin"></span></td>
+                                <td>Hair: <span id="s_character_hair"></span></td>
+                                <td>Gender: <span id="s_character_gender"></span></td>
+                                <td>Age: <span id="s_character_age"></span></td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table id="sheet_tisp">
+                            <tr>
+                                <td class="trait_name_header"><u><i>A</i></u>gility:</td>
+                                <td id="s_agility" class="trait_score_header"></td>
+                                <td class="trait_name_header"><u><i>B</i></u>rains:</td>
+                                <td id="s_brains" class="trait_score_header"></td>
+                                <td class="trait_name_header"><u><i>C</i></u>onstitution:</td>
+                                <td id="s_constitution" class="trait_score_header"></td>
+                                <td class="trait_name_header"><u><i>D</i></u>emeanor:</td>
+                                <td id="s_demeanor" class="trait_score_header"></td>
+                            </tr>
+                            <tr>
+                                <td class="instinct_name">Stealth:</td>
+                                <td id="s_stealth" class="instinct_score"></td>
+                                <td class="instinct_name">Perception:</td>
+                                <td id="s_perception" class="instinct_score"></td>
+                                <td class="instinct_name">Athletics:</td>
+                                <td id="s_athletics" class="instinct_score"></td>
+                                <td class="instinct_name">Socialize:</td>
+                                <td id="s_socialize" class="instinct_score"></td>
+                            </tr>
+                            <tr>
+                                <td class="skill_name">Acrobatics:</td>
+                                <td id="s_acrobatics" class="skill_score"></td>
+                                <td class="skill_name">Build:</td>
+                                <td id="s_build" class="skill_score"></td>
+                                <td class="skill_name">Drive:</td>
+                                <td id="s_drive" class="skill_score"></td>
+                                <td class="skill_name">Entertain:</td>
+                                <td id="s_entertain" class="skill_score"></td>
+                            </tr>
+                            <tr>
+                                <td class="skill_name">Larceny:</td>
+                                <td id="s_larceny" class="skill_score"></td>
+                                <td class="skill_name">Medicine:</td>
+                                <td id="s_medicine" class="skill_score"></td>
+                                <td class="skill_name">Melee:</td>
+                                <td id="s_melee" class="skill_score"></td>
+                                <td class="skill_name">Leadership:</td>
+                                <td id="s_leadership" class="skill_score"></td>
+                            </tr>
+                            <tr>
+                                <td class="skill_name">Ranged:</td>
+                                <td id="s_ranged" class="skill_score"></td>
+                                <td class="skill_name">Science:</td>
+                                <td id="s_science" class="skill_score"></td>
+                                <td class="skill_name">Survival:</td>
+                                <td id="s_survival" class="skill_score"></td>
+                                <td class="skill_name">Tame:</td>
+                                <td id="s_tame" class="skill_score"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="property_name"><b>Speed:</b><span id="s_speed"></span>yds</td>
+                                <td colspan="2" class="property_name"><b>XP:</b><span id="s_cur_xp"></span>/<span id="s_max_xp"></span></td>
+                                <td colspan="2" class="property_name"><b>Carry:</b><span id="s_cur_carry"></span>/<span id="s_max_carry"></span></td>
+                                <td colspan="2" class="property_name"><b>Luck:</b>&nbsp;/<span id="s_max_luck"></span></td>
+                            </tr>
+                        </table>
+                        <h3 id="s_combat_header">COMBAT</h3>
+                        <table id="sheet_defenses" style="">
+                            <tr>
+                                <td id="s_def_header" class="s_def">DEFENSES:</td>
+                                <td class="s_def">&nbsp;BLOCK: <span id="s_block"></span></td>
+                                <td class="s_def">&nbsp;DODGE: <span id="s_dodge"></span></td>
+                                <td class="s_def">&nbsp;REFLEX: <span id="s_reflex"></span></td>
+                                <td id="s_def_blank" class="s_def" style="background-color: #000000; border-collapse: true;"></td>
+                                <td id="s_def_pain_header">PAIN:</td>
+                                <td id="s_def_pain_score">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table id="sheet_health_armor">
+                            <tr>
+                                <th colspan="6" id="s_health_table">HEALTH</th>
+                            </tr>
+                            <tr>
+                                <td id="s_location_header">LOCATION</td>
+                                <td id="s_hp_header" class="center">HP</td>
+                                <td id="s_armor_header">ARMOR</td>
+                                <td id="s_ar_header" class="center">AR</td>
+                                <td id="s_armor_sz_header" class="center">Sz</td>
+                                <td id="s_armor_notes_header">Notes</td>
+                            </tr>
+                            <tr id="s_head_row">
+                                <td id="s_head_loc" class="location_name">Head</td>
+                                <td id="s_head_hp" class="center">&nbsp;/<span id="s_head_max_hp"></span></td>
+                                <td><span id="s_head_armor_type"></span></td>
+                                <td class="center">&nbsp;/<span id="s_head_max_ar"></span></td>
+                                <td class="center"><span id="s_head_armor_sz"></span></td>
+                                <td><span id="s_head_armor_notes"></span></td>
+                            </tr>
+                            <tr id="s_larm_row">
+                                <td id="s_larm_loc" class="location_name">L. Arm</td>
+                                <td id="s_larm_hp" class="center">&nbsp;/<span id="s_larm_max_hp"></span></td>
+                                <td><span id="s_larm_armor_type"></span></td>
+                                <td class="center">&nbsp;/<span id="s_larm_max_ar"></span></td>
+                                <td class="center"><span id="s_larm_armor_sz"></span></td>
+                                <td><span id="s_larm_armor_notes"></span></td>
+                            </tr>
+                            <tr id="s_rarm_row">
+                                <td id="s_rarm_loc" class="location_name">R. Arm</td>
+                                <td id="s_rarm_hp" class="center">&nbsp;/<span id="s_rarm_max_hp"></span></td>
+                                <td><span id="s_rarm_armor_type"></span></td>
+                                <td class="center">&nbsp;/<span id="s_rarm_max_ar"></span></td>
+                                <td class="center"><span id="s_rarm_armor_sz"></span></td>
+                                <td><span id="s_rarm_armor_notes"></span></td>
+                            </tr>
+                            <tr id="s_torso_row">
+                                <td id="s_torso_loc" class="location_name">Torso</td>
+                                <td id="s_torso_hp" class="center">&nbsp;/<span id="s_torso_max_hp"></span></td>
+                                <td><span id="s_torso_armor_type"></span></td>
+                                <td class="center">&nbsp;/<span id="s_torso_max_ar"></span></td>
+                                <td class="center"><span id="s_torso_armor_sz"></span></td>
+                                <td><span id="s_torso_armor_notes"></span></td>
+                            </tr>
+                            <tr id="s_lleg_row">
+                                <td id="s_lleg_loc" class="location_name">L. Leg</td>
+                                <td id="s_lleg_hp" class="center">&nbsp;/<span id="s_lleg_max_hp"></span></td>
+                                <td><span id="s_lleg_armor_type"></span></td>
+                                <td class="center">&nbsp;/<span id="s_lleg_max_ar"></span></td>
+                                <td class="center"><span id="s_lleg_armor_sz"></span></td>
+                                <td><span id="s_lleg_armor_notes"></span></td>
+                            </tr>
+                            <tr id="s_rleg_row">
+                                <td id="s_rleg_loc" class="location_name">R. Leg</td>
+                                <td id="s_rleg_hp" class="center">&nbsp;/<span id="s_rleg_max_hp"></span></td>
+                                <td><span id="s_rleg_armor_type"></span></td>
+                                <td class="center">&nbsp;/<span id="s_rleg_max_ar"></span></td>
+                                <td class="center"><span id="s_rleg_armor_sz"></span></td>
+                                <td><span id="s_rleg_armor_notes"></span></td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table id="s_weapons_table">
+                            <tr>
+                                <th id="s_weap_table_header" colspan="8">WEAPONS</th>
+                            </tr>
+                            <tr>
+                                <td id="s_weap_type" class="s_weap_header">Type</td>
+                                <td id="s_weap_atk" class="s_weap_header">ATK</td>
+                                <td id="s_weap_dmg" class="s_weap_header">DMG</td>
+                                <td id="s_weap_rng" class="s_weap_header">RNG</td>
+                                <td id="s_weap_sz" class="s_weap_header">Sz</td>
+                                <td id="s_weap_ammo" class="s_weap_header" colspan="2">Ammo</td>
+                                <td id="s_weap_notes" class="s_weap_header">Notes</td>
+                            </tr>
+                            <tr>
+                                <td id="s_weap0_type">&nbsp;</td>
+                                <td id="s_weap0_atk" class="centered">&nbsp;</td>
+                                <td id="s_weap0_dmg" class="centered">&nbsp;</td>
+                                <td id="s_weap0_rng" class="centered">&nbsp;</td>
+                                <td id="s_weap0_sz" class="centered">&nbsp;</td>
+                                <td id="s_weap0_cal" class="centered">&nbsp;</td>
+                                <td id="s_weap0_mag" class="centered">&nbsp;</td>
+                                <td id="s_weap0_notes">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_weap1_type">&nbsp;</td>
+                                <td id="s_weap1_atk" class="centered">&nbsp;</td>
+                                <td id="s_weap1_dmg" class="centered">&nbsp;</td>
+                                <td id="s_weap1_rng" class="centered">&nbsp;</td>
+                                <td id="s_weap1_sz" class="centered">&nbsp;</td>
+                                <td id="s_weap1_cal" class="centered">&nbsp;</td>
+                                <td id="s_weap1_mag" class="centered">&nbsp;</td>
+                                <td id="s_weap1_notes">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_weap2_type">&nbsp;</td>
+                                <td id="s_weap2_atk" class="centered">&nbsp;</td>
+                                <td id="s_weap2_dmg" class="centered">&nbsp;</td>
+                                <td id="s_weap2_rng" class="centered">&nbsp;</td>
+                                <td id="s_weap2_sz" class="centered">&nbsp;</td>
+                                <td id="s_weap2_cal" class="centered">&nbsp;</td>
+                                <td id="s_weap2_mag" class="centered">&nbsp;</td>
+                                <td id="s_weap2_notes">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_weap3_type">&nbsp;</td>
+                                <td id="s_weap3_atk" class="centered">&nbsp;</td>
+                                <td id="s_weap3_dmg" class="centered">&nbsp;</td>
+                                <td id="s_weap3_rng" class="centered">&nbsp;</td>
+                                <td id="s_weap3_sz" class="centered">&nbsp;</td>
+                                <td id="s_weap3_cal" class="centered">&nbsp;</td>
+                                <td id="s_weap3_mag" class="centered">&nbsp;</td>
+                                <td id="s_weap3_notes">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_weap4_type">&nbsp;</td>
+                                <td id="s_weap4_atk" class="centered">&nbsp;</td>
+                                <td id="s_weap4_dmg" class="centered">&nbsp;</td>
+                                <td id="s_weap4_rng" class="centered">&nbsp;</td>
+                                <td id="s_weap4_sz" class="centered">&nbsp;</td>
+                                <td id="s_weap4_cal" class="centered">&nbsp;</td>
+                                <td id="s_weap4_mag" class="centered">&nbsp;</td>
+                                <td id="s_weap4_notes">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table id="s_ammo_table">
+                            <tr>
+                                <td class="mag_ammo_header">Magazines</td>
+                                <td id="s_mag_type0" class="mag_ammo">&nbsp;</td>
+                                <td id="s_mag_type1" class="mag_ammo">&nbsp;</td>
+                                <td id="s_mag_type2" class="mag_ammo">&nbsp;</td>
+                                <td id="s_mag_type3" class="mag_ammo">&nbsp;</td>
+                                <td id="s_mag_type4" class="mag_ammo">&nbsp;</td>
+                                <td id="s_mag_type5" class="mag_ammo">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="mag_ammo_header">Ammunition</td>
+                                <td id="s_mag_ammo0" class="mag_ammo">&nbsp;/&nbsp;</td>
+                                <td id="s_mag_ammo1" class="mag_ammo">&nbsp;/&nbsp;</td>
+                                <td id="s_mag_ammo2" class="mag_ammo">&nbsp;/&nbsp;</td>
+                                <td id="s_mag_ammo3" class="mag_ammo">&nbsp;/&nbsp;</td>
+                                <td id="s_mag_ammo4" class="mag_ammo">&nbsp;/&nbsp;</td>
+                                <td id="s_mag_ammo5" class="mag_ammo">&nbsp;/&nbsp;</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table id="s_abilities_table">
+                            <tr>
+                                <th id="s_ability_name0" class="ability_header">ABILITIES</th>
+                                <th id="s_ability_desc0" class="ability_header">Description</th>
+                                <th id="s_ability_taken0" class="ability_header">Taken</th>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name1">&nbsp;</td>
+                                <td id="s_ability_desc1">&nbsp;</td>
+                                <td id="s_ability_taken1" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name2">&nbsp;</td>
+                                <td id="s_ability_desc2">&nbsp;</td>
+                                <td id="s_ability_taken2" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name3">&nbsp;</td>
+                                <td id="s_ability_desc3">&nbsp;</td>
+                                <td id="s_ability_taken3" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name4">&nbsp;</td>
+                                <td id="s_ability_desc4">&nbsp;</td>
+                                <td id="s_ability_taken4" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name5">&nbsp;</td>
+                                <td id="s_ability_desc5">&nbsp;</td>
+                                <td id="s_ability_taken5" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name6">&nbsp;</td>
+                                <td id="s_ability_desc6">&nbsp;</td>
+                                <td id="s_ability_taken6" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name7">&nbsp;</td>
+                                <td id="s_ability_desc7">&nbsp;</td>
+                                <td id="s_ability_taken7" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name8">&nbsp;</td>
+                                <td id="s_ability_desc8">&nbsp;</td>
+                                <td id="s_ability_taken8" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name9">&nbsp;</td>
+                                <td id="s_ability_desc9">&nbsp;</td>
+                                <td id="s_ability_taken9" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name10">&nbsp;</td>
+                                <td id="s_ability_desc10">&nbsp;</td>
+                                <td id="s_ability_taken10" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name11">&nbsp;</td>
+                                <td id="s_ability_desc11">&nbsp;</td>
+                                <td id="s_ability_taken11" class="s_taken">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_ability_name12">&nbsp;</td>
+                                <td id="s_ability_desc12">&nbsp;</td>
+                                <td id="s_ability_taken12" class="s_taken">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="character_sheet_2">
+                        <br>
+                        <br>
+                        <table id="backpack_table">
+                            <tr>
+                                <td id="backpack_header" colspan="2">BACKPACK</td>
+                            </tr>
+                            <tr>
+                                <td id="b0">&nbsp;</td><td id="b1">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b2">&nbsp;</td><td id="b3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b4">&nbsp;</td><td id="b5">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b6">&nbsp;</td><td id="b7">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b8">&nbsp;</td><td id="b9">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b10">&nbsp;</td><td id="b11">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b12">&nbsp;</td><td id="b13">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b14">&nbsp;</td><td id="b15">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b16">&nbsp;</td><td id="b17">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b18">&nbsp;</td><td id="b19">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b20">&nbsp;</td><td id="b21">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b22">&nbsp;</td><td id="b23">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b24">&nbsp;</td><td id="b25">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b26">&nbsp;</td><td id="b27">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="b28">&nbsp;</td><td id="b29">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table id="game_notes">
+                            <tr>
+                                <td id="game_notes_header">GAME NOTES:</td>
+                                <td id="comrades_header">COMRADES</td>
+                            </tr>
+                            <tr>
+                                <td><b>Relationship:</b> <span id="s_rel1"></span></td><td><span id="s_com1"></span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relationship:</b> <span id="s_rel2"></span></td><td><span id="s_com2"></span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relationship:</b> <span id="s_rel3"></span></td><td><span id="s_com3"></span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relationship:</b> <span id="s_rel4"></span></td><td><span id="s_com4"></span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Relationship:</b> <span id="s_rel5"></span></td><td><span id="s_com5"></span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Faction:</b> <span id="s_faction_name"></span></td><td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><b>Starting Experience:</b> <span id="s_starting_xp"></span></td><td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><b>Flaw:</b> <span id="s_flaw"></span></td><td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><b>History:</b> <span id="s_profession"></span></td><td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><b>Profession:</b> <span id="s_history"></span></td><td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="s_psyche"></td><td>&nbsp;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div align=center>
+                        <a id="get_pdf" onclick="genPDF()" href="#">Make PDF</a>
+                        <input class="btn btn-primary" type="button" id="regenerate_button" value="Regenerate" onclick="randomAll()" align="center">
+                        <input type="submit" value="Restart" onclick="window.location='http://www.apocalyptiarpg.com/charactercreator.html';"/>
+                        <br>
+                        <input type="checkbox" id="faction_check">Keep Faction
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <a href="http://drivethrurpg.com/product/133760/Apocalyptia" style="float: left;">DriveThruRPG Apocalyptia PDF</a><a href="mailto:info@apocalyptiarpg.com" style="float: right;">INFO@APOCALYPTIARPG.COM</a>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        $('#step1btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#step2btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#step3btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#step4btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#step5btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#step6btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#step7btn').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('#get_pdf').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+        $('regenerate_button').click(function(){
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+    });
+</script>
